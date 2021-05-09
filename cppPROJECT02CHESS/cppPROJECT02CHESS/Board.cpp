@@ -24,8 +24,22 @@ Board::Board()
 
 }
 
+Board::Board(const Board& in)
+{
+	*this = Board();
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			plot[i][j] = in.plot[i][j];
+		}
+	}
+}
+
 void Board::InitBoard()
 {
+	plot = new basechess * [8];
+	for (int i = 0; i < 8; i++) {
+		plot[i] = new basechess[8];
+	}
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 8; j++) {
 			plot[(1 - i) * 5 + 1][j] = basechess{ typestr2int["soldier"],i};
@@ -36,8 +50,8 @@ void Board::InitBoard()
 		plot[(1 - i) * 7][6] = basechess{ typestr2int["horse"],i };
 		plot[(1 - i) * 7][2] = basechess{ typestr2int["elep"],i };
 		plot[(1 - i) * 7][5] = basechess{ typestr2int["elep"],i };
-		plot[(1 - i) * 7][3] = basechess{ typestr2int["king"],i };
-		plot[(1 - i) * 7][4] = basechess{ typestr2int["queen"],i };
+		plot[(1 - i) * 7][4] = basechess{ typestr2int["king"],i };
+		plot[(1 - i) * 7][3] = basechess{ typestr2int["queen"],i };
 	}
 	//plot[2][0] = basechess{ typestr2int["soldier"],0 };
 	//dplot[2][1] = basechess{ typestr2int["soldier"],1 };
@@ -63,11 +77,20 @@ void Board::PrintBoard()
 	}
 }
 
-void Board::MoveChess(int frompos[2], int topos[2], basechess bc)
+void Board::MoveChess(int frompos[2], int topos[2])
 {
+	basechess bc = plot[frompos[1]][frompos[0]];
+	bc.moved = true;
 	plot[frompos[1]][frompos[0]] = basechess{};
 	plot[topos[1]][topos[0]] = bc;
 }
+Board Board::SimulteMove(int frompos[2], int topos[2])
+{
+	Board sim = *this;
+	sim.MoveChess(frompos, topos);
+	return sim;
+}
+
 void Board::RemoveChess(int pos[2])
 {
 	plot[pos[1]][pos[0]] = basechess{};

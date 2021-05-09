@@ -16,7 +16,7 @@ class GameManager {
 public:
 	class movetype {
 	public:
-		int type = 0;//0 = normal  1 = eat  2 = castling  3 = soldier first move  4 = passeat
+		int type = 0;//0 = normal  1 = eat  2 = castling  3 = soldier first move  4 = passeat  5 = check next player
 		int pos[2] = {-2,-2};//x , y
 		bool will_promote = false;
 		static map<int, string> typeint2str;
@@ -24,7 +24,7 @@ public:
 	private:
 	};
 	void StartGame();
-	vector<movetype> RequestAvaliStep(int req_player,int pos[2], movetype prevplayermovetype);
+	vector<movetype> RequestAvaliStep(Board& inboard, int req_player,int pos[2], movetype prevplayermovetype,bool kingcheck = true);
 	static void Printavail(vector<movetype>& in);
 private:
 	Player* players[2];
@@ -38,5 +38,6 @@ private:
 	void MainGame();
 	void Result();
 
-	//void checkpromote(movetype prevplayermovetype);
+	bool checkcheck(Board& board,int which_player);
+	int* getkingpos(Board& inboard, int which_player);
 };

@@ -3,6 +3,7 @@
 int* HumanPlayer::SelectChess(int playerid)
 {
 	int* pos = new int[2];
+	cout << "-1 -1: surrender" << endl;
 	cout << "Player: " << playerid << "  Please select a chess x y:";
 	cin >> pos[0] >> pos[1];
 	return pos;
@@ -22,7 +23,16 @@ void HumanPlayer::OnMove(Board& const board, int* frompos, GameManager::movetype
 	if (GameManager::movetype::typeint2str[to.type] == "passeat") {
 		board.RemoveChess(new int[2]{ to.pos[0],frompos[1] });
 	}
-	board.MoveChess(frompos, to.pos, board.GetChess(frompos));
+	if (GameManager::movetype::typeint2str[to.type] == "castling") {
+		if (to.pos[0] == 6) {//短易位
+			board.MoveChess(new int[2]{ 7,frompos[1] }, new int[2]{ 5,frompos[1] });
+		}
+		else {//長易位
+			board.MoveChess(new int[2]{ 0,frompos[1] }, new int[2]{ 3,frompos[1] });
+		}
+
+	}
+	board.MoveChess(frompos, to.pos);
 }
 
 void HumanPlayer::OnPromote(Board& const board, int Pos[2], Board::basechess outchess)
@@ -38,5 +48,5 @@ int HumanPlayer::SelectPromote(Board& const board, int Pos[2])
 	}
 	cout << "Please select which to promote: ";
 	cin >> selected;
-	return selected+2;
+	return selected + 2;
 }
