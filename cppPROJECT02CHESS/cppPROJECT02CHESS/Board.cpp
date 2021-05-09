@@ -2,22 +2,82 @@
 
 Board::Board()
 {
-	plot = new int* [8];
+	plot = new basechess * [8];
 	for (int i = 0; i < 8; i++) {
-		plot[i] = new int[8];
+		plot[i] = new basechess[8];
 	}
-	typestr2int["king"] = 0;
-	typestr2int["queen"] = 1;
-	typestr2int["car"] = 2;
-	typestr2int["elephant"] = 3;
-	typestr2int["horse"] = 4;
-	typestr2int["soldier"] = 5;
+	typestr2int[""] = 0;
+	typestr2int["king"] = 1;
+	typestr2int["queen"] = 2;
+	typestr2int["car"] = 3;
+	typestr2int["elep"] = 4;
+	typestr2int["horse"] = 5;
+	typestr2int["soldier"] = 6;
 
-	typeint2str[0] = "king";
-	typeint2str[1] = "queen";
-	typeint2str[2] = "car";
-	typeint2str[3] = "elephant";
-	typeint2str[4] = "horse";
-	typeint2str[5] = "soldier";
+	typeint2str[0] = "";
+	typeint2str[1] = "king";
+	typeint2str[2] = "queen";
+	typeint2str[3] = "car";
+	typeint2str[4] = "elep";
+	typeint2str[5] = "horse";
+	typeint2str[6] = "soldier";
 
+}
+
+void Board::InitBoard()
+{
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 8; j++) {
+			plot[(1 - i) * 5 + 1][j] = basechess{ typestr2int["soldier"],i};
+		}
+		plot[(1 - i) * 7][0] = basechess{ typestr2int["car"],i };
+		plot[(1 - i) * 7][7] = basechess{ typestr2int["car"],i };
+		plot[(1 - i) * 7][1] = basechess{ typestr2int["horse"],i };
+		plot[(1 - i) * 7][6] = basechess{ typestr2int["horse"],i };
+		plot[(1 - i) * 7][2] = basechess{ typestr2int["elep"],i };
+		plot[(1 - i) * 7][5] = basechess{ typestr2int["elep"],i };
+		plot[(1 - i) * 7][3] = basechess{ typestr2int["king"],i };
+		plot[(1 - i) * 7][4] = basechess{ typestr2int["queen"],i };
+	}
+	//plot[2][0] = basechess{ typestr2int["soldier"],0 };
+	//dplot[2][1] = basechess{ typestr2int["soldier"],1 };
+}
+
+void Board::PrintBoard()
+{
+	for (int i = 0; i < 9; i++) {
+		if (i > 0) {
+			cout << i - 1 << "\t\t";
+		}
+		else {
+			cout << "\t\t";
+		}
+	}
+	cout << endl;
+	for (int i = 0; i < 8; i++) {
+		cout << i << "\t\t";
+		for (int j = 0; j < 8; j++) {
+			cout << plot[i][j].turn<<"\t"<< typeint2str[plot[i][j].type]<<"\t";
+		}
+		cout << endl;
+	}
+}
+
+void Board::MoveChess(int frompos[2], int topos[2], basechess bc)
+{
+	plot[frompos[1]][frompos[0]] = basechess{};
+	plot[topos[1]][topos[0]] = bc;
+}
+void Board::RemoveChess(int pos[2])
+{
+	plot[pos[1]][pos[0]] = basechess{};
+}
+void Board::PlaceChess(int pos[2], basechess bc)
+{
+	plot[pos[1]][pos[0]] = bc;
+}
+
+Board::basechess Board::GetChess(int pos[2])
+{
+	return plot[pos[1]][pos[0]];
 }
