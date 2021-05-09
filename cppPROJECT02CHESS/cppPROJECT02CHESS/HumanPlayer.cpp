@@ -27,4 +27,16 @@ void HumanPlayer::OnMove(Board& const board, int* frompos, GameManager::movetype
 
 void HumanPlayer::OnPromote(Board& const board, int Pos[2], Board::basechess outchess)
 {
+	board.PlaceChess(Pos, outchess);
+}
+
+int HumanPlayer::SelectPromote(Board& const board, int Pos[2])
+{
+	int selected;
+	for (int i = 2; i < 6; i++) {
+		cout << i - 2 << ". " << board.typeint2str[i] << endl;
+	}
+	cout << "Please select which to promote: ";
+	cin >> selected;
+	return selected+2;
 }

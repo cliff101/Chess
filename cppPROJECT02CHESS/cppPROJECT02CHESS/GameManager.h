@@ -18,6 +18,7 @@ public:
 	public:
 		int type = 0;//0 = normal  1 = eat  2 = castling  3 = soldier first move  4 = passeat
 		int pos[2] = {-2,-2};//x , y
+		bool will_promote = false;
 		static map<int, string> typeint2str;
 		static map<string, int> typestr2int;
 	private:
