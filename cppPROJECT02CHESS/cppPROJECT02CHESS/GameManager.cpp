@@ -35,7 +35,7 @@ vector<GameManager::movetype> GameManager::RequestAvaliStep(Board& inboard, int 
 		if (pos[0] > 0 && inboard.plot[pos[1] + 1 * (req_player == 0 ? -1 : 1)][pos[0] - 1].turn == (1 - req_player)) {
 			avail.push_back(movetype{ 1,{pos[0] - 1,pos[1] + 1 * (req_player == 0 ? -1 : 1) },req_player == 0 ? pos[1] + 1 * (req_player == 0 ? -1 : 1) == 0 : pos[1] + 1 * (req_player == 0 ? -1 : 1) == 7 });
 		}
-		if (pos[0] < 6 && inboard.plot[pos[1] + 1 * (req_player == 0 ? -1 : 1)][pos[0] + 1].turn == (1 - req_player)) {
+		if (pos[0] < 7 && inboard.plot[pos[1] + 1 * (req_player == 0 ? -1 : 1)][pos[0] + 1].turn == (1 - req_player)) {
 			avail.push_back(movetype{ 1,{pos[0] + 1,pos[1] + 1 * (req_player == 0 ? -1 : 1) },req_player == 0 ? pos[1] + 1 * (req_player == 0 ? -1 : 1) == 0 : pos[1] + 1 * (req_player == 0 ? -1 : 1) == 7 });
 		}
 	}
@@ -166,38 +166,26 @@ vector<GameManager::movetype> GameManager::RequestAvaliStep(Board& inboard, int 
 			if (pos[0] + x <= 7 && pos[0] + x >= 0 && pos[1] + y >= 0 && pos[1] + y <= 7) {
 				if (inboard.plot[pos[1] + y][pos[0] + x].type == 0) {
 					avail.push_back(movetype{ 0,pos[0] + x,pos[1] + y });
-					if (kingcheck) {
-						Board temp2 = inboard.SimulteMove(pos, avail[avail.size() - 1].pos);
-						if (checkcheck(temp2, req_player)) {
-							avail.pop_back();
-						}
-					}
 				}
 				else if (inboard.plot[pos[1] + y][pos[0] + x].turn != req_player) {
 					avail.push_back(movetype{ 1,pos[0] + x,pos[1] + y });
-					if (kingcheck) {
-						Board temp2 = inboard.SimulteMove(pos, avail[avail.size() - 1].pos);
-						if (checkcheck(temp2, req_player)) {
-							avail.pop_back();
-						}
-					}
 				}
 			}
 			temp = -x;
 			x = y;
 			y = temp;
 		}
-		if (kingcheck && !checkcheck(board, req_player && !selected.moved)) {
-			if (!board.plot[(req_player == 0 ? 7 : 0)][0].moved) {//長易位
+		if (kingcheck && !checkcheck(inboard, req_player) && !selected.moved) {
+			if (!inboard.plot[(req_player == 0 ? 7 : 0)][0].moved) {//長易位
 				bool cancas = true;
 				for (int i = 0; i < 3; i++) {
-					if (board.plot[(req_player == 0 ? 7 : 0)][i + 1].type != 0) {
+					if (inboard.plot[(req_player == 0 ? 7 : 0)][i + 1].type != 0) {
 						cancas = false;
 						break;
 					}
 				}
 				for (int i = 0; cancas && i < 2; i++) {
-					Board temp2 = board.SimulteMove(pos, new int[2]{ 2 + i,(req_player == 0 ? 7 : 0) });
+					Board temp2 = inboard.SimulteMove(pos, new int[2]{ 2 + i,(req_player == 0 ? 7 : 0) });
 					if (checkcheck(temp2, req_player)) {
 						cancas = false;
 						break;
@@ -207,16 +195,16 @@ vector<GameManager::movetype> GameManager::RequestAvaliStep(Board& inboard, int 
 					avail.push_back(movetype{ 2,{2,(req_player == 0 ? 7 : 0)} });
 				}
 			}
-			if (!board.plot[(req_player == 0 ? 7 : 0)][7].moved) {//短易位
+			if (!inboard.plot[(req_player == 0 ? 7 : 0)][7].moved) {//短易位
 				bool cancas = true;
 				for (int i = 0; i < 2; i++) {
-					if (board.plot[(req_player == 0 ? 7 : 0)][i + 5].type != 0) {
+					if (inboard.plot[(req_player == 0 ? 7 : 0)][i + 5].type != 0) {
 						cancas = false;
 						break;
 					}
 				}
 				for (int i = 0; cancas && i < 2; i++) {
-					Board temp2 = board.SimulteMove(pos, new int[2]{ 5 + i,(req_player == 0 ? 7 : 0) });
+					Board temp2 = inboard.SimulteMove(pos, new int[2]{ 5 + i,(req_player == 0 ? 7 : 0) });
 					if (checkcheck(temp2, req_player)) {
 						cancas = false;
 						break;
@@ -229,13 +217,12 @@ vector<GameManager::movetype> GameManager::RequestAvaliStep(Board& inboard, int 
 		}
 	}
 	if (kingcheck) {
-		for (int i = 0; i < avail.size(); i++) {
-			if (checkcheck(inboard, req_player)) {
-				Board temp2 = board.SimulteMove(pos, avail[i].pos);
-				if (checkcheck(temp2, req_player)) {
-					avail.erase(avail.begin() + i);
-					i--;
-				}
+		for (int i = 0; i < avail.size(); i++) {//如果移動後被將軍，不可動
+			Board temp2 = inboard.SimulteMove(pos, avail[i].pos);
+			if (checkcheck(temp2, req_player)) {
+				avail.erase(avail.begin() + i);
+				i--;
+				continue;
 			}
 		}
 	}
@@ -283,6 +270,7 @@ void GameManager::MainGame()
 		system("cls");
 		board.PrintBoard();//maybe call viewer
 		if (checkcheck(board, current_player)) {
+			cout << "You have been Checked!"<<endl;
 			bool found = false;
 			for (int i = 0; !found && i < 8; i++) {
 				for (int j = 0; !found && j < 8; j++) {

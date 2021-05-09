@@ -5,10 +5,10 @@ C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.h(10,40): warning C4227: 過時的用法: 已忽略參考上的限定詞
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.h(11,43): warning C4227: 過時的用法: 已忽略參考上的限定詞
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.h(12,46): warning C4227: 過時的用法: 已忽略參考上的限定詞
-C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(232,21): warning C4018: '<': signed/unsigned 不相符
-C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(291,25): warning C4018: '<': signed/unsigned 不相符
-C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(325,25): warning C4018: '<': signed/unsigned 不相符
-C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(362,20): warning C4018: '<': signed/unsigned 不相符
-C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(373,23): warning C4018: '<': signed/unsigned 不相符
-C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(392): warning C4715: 'GameManager::getkingpos': 不是所有控制路徑都傳回值
+C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(220,21): warning C4018: '<': signed/unsigned 不相符
+C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(279,25): warning C4018: '<': signed/unsigned 不相符
+C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(313,25): warning C4018: '<': signed/unsigned 不相符
+C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(350,20): warning C4018: '<': signed/unsigned 不相符
+C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(361,23): warning C4018: '<': signed/unsigned 不相符
+C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(380): warning C4715: 'GameManager::getkingpos': 不是所有控制路徑都傳回值
   cppPROJECT02CHESS.vcxproj -> C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\Debug\cppPROJECT02CHESS.exe
