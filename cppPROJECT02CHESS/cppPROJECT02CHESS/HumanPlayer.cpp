@@ -113,7 +113,29 @@ int HumanPlayer::SelectPromote(Board& const board, int Pos[2])
 	for (int i = 2; i < 6; i++) {
 		cout << i - 2 << ". " << board.typeint2str[i] << endl;
 	}
-	cout << "Please select which to promote: ";
+	HANDLE h;
+	DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
+	h = GetStdHandle(STD_INPUT_HANDLE);
+	GetConsoleMode(h, &fdwModeOld);
+	SetConsoleMode(h, fdwMode);
+	while (true) {
+		INPUT_RECORD in;
+		ReadConsoleInput(h, &in, 1, &NumRead);
+		if (in.EventType == KEY_EVENT && in.Event.KeyEvent.bKeyDown == false) {
+			if (in.Event.KeyEvent.wVirtualKeyCode == 0x30) {
+				SetConsoleMode(h, fdwModeOld);
+				return 2;
+			}
+			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x31) {
+				SetConsoleMode(h, fdwModeOld);
+				return 3;
+			}
+			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x32) {
+				SetConsoleMode(h, fdwModeOld);
+				return 4;
+			}
+		}
+	}
 	cin >> selected;
 	return selected + 2;
 }

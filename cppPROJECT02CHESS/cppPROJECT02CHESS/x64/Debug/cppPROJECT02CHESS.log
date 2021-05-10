@@ -1,0 +1,14 @@
+﻿  HumanPlayer.cpp
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(11,40): warning C4227: anachronism used: qualifiers on reference are ignored
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(12,43): warning C4227: anachronism used: qualifiers on reference are ignored
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(15,46): warning C4227: anachronism used: qualifiers on reference are ignored
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.h(10,40): warning C4227: anachronism used: qualifiers on reference are ignored
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.h(11,43): warning C4227: anachronism used: qualifiers on reference are ignored
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.h(12,46): warning C4227: anachronism used: qualifiers on reference are ignored
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.cpp(45,19): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.cpp(46,19): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.cpp(56,6): warning C4101: 'selected_move_id': unreferenced local variable
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.cpp(88,44): warning C4227: anachronism used: qualifiers on reference are ignored
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.cpp(105,47): warning C4227: anachronism used: qualifiers on reference are ignored
+D:\code\cpp\project\Project2\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.cpp(110,50): warning C4227: anachronism used: qualifiers on reference are ignored
+  cppPROJECT02CHESS.vcxproj -> D:\code\cpp\project\Project2\cppPROJECT02CHESS\x64\Debug\cppPROJECT02CHESS.exe
