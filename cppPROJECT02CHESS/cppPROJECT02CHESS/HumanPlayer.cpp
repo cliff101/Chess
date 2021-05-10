@@ -6,7 +6,8 @@ int* HumanPlayer::SelectChess(int playerid)
 	cout << "(q): surrender  ";
 	cout << "(s): save game  ";
 	cout << "(u): undo  ";
-	cout << "(r): redo  \n";
+	cout << "(r): redo  ";
+	cout << "Player: " << playerid << "\n";
 	HANDLE h;
 	DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
 	h = GetStdHandle(STD_INPUT_HANDLE);
@@ -40,7 +41,7 @@ int* HumanPlayer::SelectChess(int playerid)
 			}
 		}
 		else if (in.EventType == MOUSE_EVENT) {
-			if (in.Event.MouseEvent.dwEventFlags == 0) {
+			if (in.Event.MouseEvent.dwEventFlags == 0 && in.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
 				pos[0] = floor(in.Event.MouseEvent.dwMousePosition.X / 13);
 				pos[1] = floor(in.Event.MouseEvent.dwMousePosition.Y / 7);
 				SetConsoleMode(h, fdwModeOld);
@@ -50,13 +51,38 @@ int* HumanPlayer::SelectChess(int playerid)
 	}
 }
 
-int HumanPlayer::SelectMoveOption(vector<GameManager::movetype>& avail)
+int HumanPlayer::SelectMoveOption(vector<GameManager::movetype>& avail, int selectedchesstype)
 {
 	int selected_move_id;
-	GameManager::Printavail(avail);
-	cout << "Please select:";
-	cin >> selected_move_id;
-	return selected_move_id;
+
+	for (int i = 0; i < avail.size(); i++) {
+		Viewer::printOneChess(3, avail[i].pos, 0, avail[i].type);
+	}
+	//GameManager::Printavail(avail);
+	//cout << "Please select:";
+	HANDLE h;
+	DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
+	h = GetStdHandle(STD_INPUT_HANDLE);
+	GetConsoleMode(h, &fdwModeOld);
+	SetConsoleMode(h, fdwMode);
+	while (true) {
+		INPUT_RECORD in;
+		ReadConsoleInput(h, &in, 1, &NumRead);
+		if (in.EventType == MOUSE_EVENT) {
+			if (in.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
+				for (int i = 0; i < avail.size(); i++) {
+					if (avail[i].pos[0] == floor(in.Event.MouseEvent.dwMousePosition.X / 13) && avail[i].pos[1] == floor(in.Event.MouseEvent.dwMousePosition.Y / 7)) {
+						SetConsoleMode(h, fdwModeOld);
+						return i;
+					}
+				}
+			}
+			else if (in.Event.MouseEvent.dwButtonState == RIGHTMOST_BUTTON_PRESSED) {
+				SetConsoleMode(h, fdwModeOld);
+				return 9999;
+			}
+		}
+	}
 }
 
 void HumanPlayer::OnMove(Board& const board, int* frompos, GameManager::movetype to)

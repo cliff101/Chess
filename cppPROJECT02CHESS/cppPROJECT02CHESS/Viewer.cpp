@@ -23,9 +23,9 @@ void Viewer::print(Board::basechess** board) {
 	}
 	gotoxy(0, 56);
 }
-void Viewer::printOneChess(int chesstype, const int pos[2], int turn) {
+void Viewer::printOneChess(int chesstype, const int pos[2], int turn, int type) {
 	int color[7][13];
-	int bgcolor, playercolor;
+	int bgcolor, playercolor, selectcolor;
 	if ((pos[0] + pos[1]) % 2 == 0) {
 		bgcolor = 130;
 	}
@@ -42,6 +42,41 @@ void Viewer::printOneChess(int chesstype, const int pos[2], int turn) {
 		for (int j = 0; j < 13; j++) {
 			color[i][j] = bgcolor;
 		}
+	}
+	selectcolor = bgcolor;
+	if (type == 0 || type == 2 || type == 3) {
+		if ((pos[0] + pos[1]) % 2 == 0) {
+			selectcolor = 102;
+		}
+		else {
+			selectcolor = 225;
+		}
+	}
+	else if (type == 1 || type == 4) {
+		selectcolor = 165;
+	}
+	else if (type == 10) {
+		selectcolor = 200;
+	}
+	if (type != -1) {
+		gotoxy(pos[0] * 13, pos[1] * 7);
+		SetColor(selectcolor);
+		for (int i = 0; i < 13; i++) {
+			cout << " ";
+		}
+		gotoxy(pos[0] * 13, pos[1] * 7 + 6);
+		for (int i = 0; i < 13; i++) {
+			cout << " ";
+		}
+		for (int i = 1; i < 6; i++) {
+			gotoxy(pos[0] * 13, pos[1] * 7 + i);
+			cout << "  ";
+			gotoxy(pos[0] * 13 + 11, pos[1] * 7 + i);
+			cout << "  ";
+		}
+		SetColor();
+		gotoxy(0, 57);
+		return;
 	}
 	if (chesstype == 1) {
 		color[1][4] = playercolor; color[1][6] = playercolor; color[1][8] = playercolor;

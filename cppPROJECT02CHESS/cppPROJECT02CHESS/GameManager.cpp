@@ -272,7 +272,8 @@ void GameManager::Lobby()
 void GameManager::MainGame(string filename)
 {
 	board.InitBoard();
-	current_player = 0;
+	srand(time(NULL));
+	current_player = rand() % 2;
 	state = 0;
 	int selected_move_id,//傳入之avail的index
 		selected_promote_id;//選擇要promote的棋
@@ -302,7 +303,7 @@ void GameManager::MainGame(string filename)
 		state = 0;
 		if (checkcheck(board, current_player)) {
 			state = 1;
-			cout << "You have been Checked!"<<endl;
+			Viewer::printOneChess(3, getkingpos(board, current_player), current_player, 10);
 			bool found = false;
 			for (int i = 0; !found && i < 8; i++) {
 				for (int j = 0; !found && j < 8; j++) {
@@ -355,7 +356,7 @@ void GameManager::MainGame(string filename)
 			continue;
 		}
 		else if (selectedpos[0] == 'r') {
-			if (current_step != gamerecord.size()-1) {
+			if (current_step != gamerecord.size() - 1) {
 				current_step++;
 				board = gamerecord[current_step].board;
 				current_player = gamerecord[current_step].current_player;
@@ -372,7 +373,7 @@ void GameManager::MainGame(string filename)
 		}
 		vector<movetype> avail = RequestAvaliStep(board, current_player, new int[2]{ selectedpos[0],selectedpos[1] }, prevmove);
 		if (avail.size() > 0) {
-			selected_move_id = players[current_player]->SelectMoveOption(avail);
+			selected_move_id = players[current_player]->SelectMoveOption(avail, board.plot[selectedpos[1]][selectedpos[0]].type);
 			if (selected_move_id < avail.size()) {
 				players[current_player]->OnMove(board, selectedpos, avail[selected_move_id]);
 				if (avail[selected_move_id].will_promote) {
@@ -383,11 +384,11 @@ void GameManager::MainGame(string filename)
 				prevmove = avail[selected_move_id];
 
 				//clear 多出來的gamerecord
-				while (gamerecord.size() > current_step+1) {
+				while (gamerecord.size() > current_step + 1) {
 					gamerecord.pop_back();
 				}
 				//save gamelog to gamerecord
-				gamerecord.push_back(gamelog(board,current_player));
+				gamerecord.push_back(gamelog(board, current_player));
 				current_step++;
 			}
 			else {

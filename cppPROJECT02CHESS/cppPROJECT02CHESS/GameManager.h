@@ -17,7 +17,7 @@ class GameManager {
 public:
 	class movetype {
 	public:
-		int type = 0;//0 = normal  1 = eat  2 = castling  3 = soldier first move  4 = passeat  5 = check next player
+		int type = 0;//0 = normal  1 = eat  2 = castling  3 = soldier first move  4 = passeat  10 = been checked
 		int pos[2] = {-2,-2};//x , y
 		bool will_promote = false;
 		static map<int, string> typeint2str;
