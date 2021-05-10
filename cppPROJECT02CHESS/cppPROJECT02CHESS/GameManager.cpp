@@ -242,19 +242,25 @@ void GameManager::Lobby()
 		///*
 		system("cls");
 		cout << "Welcome to CONSOLE CHESS!!" << endl;
-		cout << "1. Play\n2. Exit\nPlease Enter: ";
+		cout << "1. Play\n2. Load\ne. Exit\nPlease Enter: ";
 		getline(cin, input);
 		//*/
 		if (input == "1") {
 			MainGame();
 		}
 		else if (input == "2") {
+			string filename;
+			cout << "load filename:";
+			cin >> filename;
+			MainGame(filename);
+		}
+		else if (input == "e") {
 			break;
 		}
 	}
 }
 
-void GameManager::MainGame()
+void GameManager::MainGame(string filename)
 {
 	board.InitBoard();
 	current_player = 0;
@@ -266,10 +272,24 @@ void GameManager::MainGame()
 	players[0] = new HumanPlayer{};
 	players[1] = new HumanPlayer{};
 
+	if (filename != "") {
+		ifstream ifile(filename);
+		gamelog gl;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				ifile.read((char*)&board.plot[i][j], sizeof(board.plot[i][j]));
+			}
+		}
+		ifile.read((char*)&gl.current_player, sizeof(gl.current_player));
+		ifile.close();
+	}
+
 	while (true) {
 		system("cls");
 		board.PrintBoard();//maybe call viewer
+		state = 0;
 		if (checkcheck(board, current_player)) {
+			state = 1;
 			cout << "You have been Checked!"<<endl;
 			bool found = false;
 			for (int i = 0; !found && i < 8; i++) {
@@ -304,8 +324,23 @@ void GameManager::MainGame()
 			break;
 		}
 		selectedpos = players[current_player]->SelectChess(current_player);
-		if (selectedpos[0] == -1 && selectedpos[1] == -1) {
+		if (selectedpos[0] == -1) {
 			break;
+		}
+		else if (selectedpos[0] == 's') {
+			string filename;
+			cout << "save filename:";
+			cin >> filename;
+			ofstream ofile(filename);
+			gamelog gl{ board,current_player };
+			for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8; j++) {
+					ofile.write((char*)&board.plot[i][j], sizeof(board.plot[i][j]));
+				}
+			}
+			ofile.write((char*)&gl.current_player, sizeof(gl.current_player));
+			ofile.close();
+			continue;
 		}
 		vector<movetype> avail = RequestAvaliStep(board, current_player, new int[2]{ selectedpos[0],selectedpos[1] }, prevmove);
 		if (avail.size() > 0) {

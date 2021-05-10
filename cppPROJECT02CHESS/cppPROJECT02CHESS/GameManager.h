@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <fstream>
 #include "Viewer.h"
 #include "Board.h"
 
@@ -23,6 +24,12 @@ public:
 		static map<string, int> typestr2int;
 	private:
 	};
+	class gamelog {//use a vector of this log, use the vector to simulate Undo Redo Save Load.
+	public:
+		Board board;
+		int current_player;
+	};
+
 	void StartGame();
 	vector<movetype> RequestAvaliStep(Board& inboard, int req_player,int pos[2], movetype prevplayermovetype,bool kingcheck = true);
 	static void Printavail(vector<movetype>& in);
@@ -33,9 +40,9 @@ private:
 	Viewer viewer;
 
 	int gameturn;//0 = player0  1 = player1
-	int state;//0 = move chess  1 = promote  2 = checkmate  3 = nextplayer
+	int state;//0 = move chess  1 = checkmate
 	void Lobby();
-	void MainGame();
+	void MainGame(string filename = "");
 	void Result();
 
 	bool checkcheck(Board& board,int which_player);

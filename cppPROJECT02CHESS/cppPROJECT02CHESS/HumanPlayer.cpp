@@ -3,9 +3,21 @@
 int* HumanPlayer::SelectChess(int playerid)
 {
 	int* pos = new int[2];
-	cout << "-1 -1: surrender" << endl;
+	string temp;
+	cout << "-1: surrender" << endl;
+	cout << "s: save game" << endl;
 	cout << "Player: " << playerid << "  Please select a chess x y:";
-	cin >> pos[0] >> pos[1];
+	cin >> temp;
+	if (temp=="s") {
+		pos[0] = temp[0];
+		return pos;
+	}
+
+	pos[0] = stoi(temp);
+	if (pos[0] == -1) {
+		return pos;
+	}
+	cin >> pos[1];
 	return pos;
 }
 
