@@ -26,6 +26,8 @@ public:
 	};
 	class gamelog {//use a vector of this log, use the vector to simulate Undo Redo Save Load.
 	public:
+		gamelog() :board(Board{}),current_player(3) {}
+		gamelog(Board b, int i) :board(b), current_player(i) {}
 		Board board;
 		int current_player;
 	};
@@ -38,6 +40,8 @@ private:
 	int current_player;
 	Board board;
 	Viewer viewer;
+
+	vector<gamelog> gamerecord;
 
 	int gameturn;//0 = player0  1 = player1
 	int state;//0 = move chess  1 = checkmate

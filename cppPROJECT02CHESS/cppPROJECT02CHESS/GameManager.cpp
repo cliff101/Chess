@@ -272,6 +272,9 @@ void GameManager::MainGame(string filename)
 	players[0] = new HumanPlayer{};
 	players[1] = new HumanPlayer{};
 
+	int current_step = 0;
+	gamerecord.push_back(gamelog(board, current_player));
+
 	if (filename != "") {
 		ifstream ifile(filename);
 		gamelog gl;
@@ -283,7 +286,6 @@ void GameManager::MainGame(string filename)
 		ifile.read((char*)&gl.current_player, sizeof(gl.current_player));
 		ifile.close();
 	}
-
 	while (true) {
 		system("cls");
 		//board.PrintBoard();//maybe call viewer
@@ -343,6 +345,22 @@ void GameManager::MainGame(string filename)
 			ofile.close();
 			continue;
 		}
+		else if (selectedpos[0] == 'r') {
+			if (current_step != gamerecord.size()-1) {
+				current_step++;
+				board = gamerecord[current_step].board;
+				current_player = gamerecord[current_step].current_player;
+			}
+			continue;
+		}
+		else if (selectedpos[0] == 'u') {
+			if (current_step != 0) {
+				current_step--;
+				board = gamerecord[current_step].board;
+				current_player = gamerecord[current_step].current_player;
+			}
+			continue;
+		}
 		vector<movetype> avail = RequestAvaliStep(board, current_player, new int[2]{ selectedpos[0],selectedpos[1] }, prevmove);
 		if (avail.size() > 0) {
 			selected_move_id = players[current_player]->SelectMoveOption(avail);
@@ -354,6 +372,14 @@ void GameManager::MainGame(string filename)
 				}
 				current_player = 1 - current_player;
 				prevmove = avail[selected_move_id];
+
+				//clear 多出來的gamerecord
+				while (gamerecord.size() > current_step+1) {
+					gamerecord.pop_back();
+				}
+				//save gamelog to gamerecord
+				gamerecord.push_back(gamelog(board,current_player));
+				current_step++;
 			}
 			else {
 				continue;

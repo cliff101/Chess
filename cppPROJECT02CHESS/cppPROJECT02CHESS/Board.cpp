@@ -26,12 +26,59 @@ Board::Board()
 
 Board::Board(const Board& in)
 {
-	*this = Board();
+	plot = new basechess * [8];
+	for (int i = 0; i < 8; i++) {
+		plot[i] = new basechess[8];
+	}
+	typestr2int[""] = 0;
+	typestr2int["king"] = 1;
+	typestr2int["queen"] = 2;
+	typestr2int["car"] = 3;
+	typestr2int["elep"] = 4;
+	typestr2int["horse"] = 5;
+	typestr2int["soldier"] = 6;
+
+	typeint2str[0] = "";
+	typeint2str[1] = "king";
+	typeint2str[2] = "queen";
+	typeint2str[3] = "car";
+	typeint2str[4] = "elep";
+	typeint2str[5] = "horse";
+	typeint2str[6] = "soldier";
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			plot[i][j] = in.plot[i][j];
 		}
 	}
+}
+
+Board Board::operator=(const Board& in)
+{
+	plot = new basechess * [8];
+	for (int i = 0; i < 8; i++) {
+		plot[i] = new basechess[8];
+	}
+	typestr2int[""] = 0;
+	typestr2int["king"] = 1;
+	typestr2int["queen"] = 2;
+	typestr2int["car"] = 3;
+	typestr2int["elep"] = 4;
+	typestr2int["horse"] = 5;
+	typestr2int["soldier"] = 6;
+
+	typeint2str[0] = "";
+	typeint2str[1] = "king";
+	typeint2str[2] = "queen";
+	typeint2str[3] = "car";
+	typeint2str[4] = "elep";
+	typeint2str[5] = "horse";
+	typeint2str[6] = "soldier";
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			plot[i][j] = in.plot[i][j];
+		}
+	}
+	return *this;
 }
 
 void Board::InitBoard()

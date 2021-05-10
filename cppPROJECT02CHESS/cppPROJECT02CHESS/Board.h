@@ -16,6 +16,7 @@ public:
 	};
 	Board();
 	Board(const Board&);
+	Board operator=(const Board &);
 	void InitBoard();
 	void PrintBoard();
 	void MoveChess(int frompos[2],int topos[2]);

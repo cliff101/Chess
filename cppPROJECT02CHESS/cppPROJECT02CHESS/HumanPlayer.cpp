@@ -4,11 +4,13 @@ int* HumanPlayer::SelectChess(int playerid)
 {
 	int* pos = new int[2];
 	string temp;
-	cout << "-1: surrender" << endl;
-	cout << "s: save game" << endl;
-	cout << "Player: " << playerid << "  Please select a chess x y:";
+	cout << "(-1): surrender  ";
+	cout << "(s): save game  ";
+	cout << "(u): undo  ";
+	cout << "(r): redo  ";
+	cout << "Player: " << playerid << "  Please select a chess (x y):";
 	cin >> temp;
-	if (temp=="s") {
+	if (temp == "s" || temp == "u" || temp == "r") {
 		pos[0] = temp[0];
 		return pos;
 	}
