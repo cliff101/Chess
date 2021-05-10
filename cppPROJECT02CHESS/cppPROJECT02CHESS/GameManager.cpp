@@ -237,25 +237,34 @@ void GameManager::StartGame()
 
 void GameManager::Lobby()
 {
+	HANDLE h;
+	INPUT_RECORD in;
+	DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
+	h = GetStdHandle(STD_INPUT_HANDLE);
+	GetConsoleMode(h, &fdwModeOld);
 	while (true) {
-		string input = "1";
-		///*
+		SetConsoleMode(h, fdwMode);
 		system("cls");
 		cout << "Welcome to CONSOLE CHESS!!" << endl;
-		cout << "1. Play\n2. Load\ne. Exit\nPlease Enter: ";
-		getline(cin, input);
-		//*/
-		if (input == "1") {
-			MainGame();
-		}
-		else if (input == "2") {
-			string filename;
-			cout << "load filename:";
-			cin >> filename;
-			MainGame(filename);
-		}
-		else if (input == "e") {
-			break;
+		cout << "1. Play\n2. Load\ne. Exit\n";
+		ReadConsoleInput(h, &in, 1, &NumRead);
+
+		if (in.EventType == KEY_EVENT) {
+			if (in.Event.KeyEvent.wVirtualKeyCode == 0x31 || in.Event.KeyEvent.wVirtualKeyCode == 0x61) {
+				SetConsoleMode(h, fdwModeOld);
+				MainGame();
+			}
+			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x32 || in.Event.KeyEvent.wVirtualKeyCode == 0x62) {
+				SetConsoleMode(h, fdwModeOld);
+				string filename;
+				cout << "load filename:";
+				cin >> filename;
+				MainGame(filename);
+			}
+			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x45) {
+				SetConsoleMode(h, fdwModeOld);
+				break;
+			}
 		}
 	}
 }
@@ -327,7 +336,7 @@ void GameManager::MainGame(string filename)
 			break;
 		}
 		selectedpos = players[current_player]->SelectChess(current_player);
-		if (selectedpos[0] == -1) {
+		if (selectedpos[0] == 'q') {
 			break;
 		}
 		else if (selectedpos[0] == 's') {

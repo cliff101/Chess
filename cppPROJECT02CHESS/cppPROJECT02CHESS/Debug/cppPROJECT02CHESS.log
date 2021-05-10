@@ -1,2 +1,15 @@
-﻿  Board.cpp
-  cppPROJECT02CHESS.vcxproj -> C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\Debug\cppPROJECT02CHESS.exe
+﻿  GameManager.cpp
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(11,40): warning C4227: anachronism used: qualifiers on reference are ignored
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(12,43): warning C4227: anachronism used: qualifiers on reference are ignored
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(15,46): warning C4227: anachronism used: qualifiers on reference are ignored
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.h(10,40): warning C4227: anachronism used: qualifiers on reference are ignored
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.h(11,43): warning C4227: anachronism used: qualifiers on reference are ignored
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\HumanPlayer.h(12,46): warning C4227: anachronism used: qualifiers on reference are ignored
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(220,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(311,25): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(376,25): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(386,30): warning C4018: '>': signed/unsigned mismatch
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(421,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(432,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Fighting\Desktop\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(451): warning C4715: 'GameManager::getkingpos': not all control paths return a value
+  cppPROJECT02CHESS.vcxproj -> C:\Users\Fighting\Desktop\cppPROJECT02CHESS\Debug\cppPROJECT02CHESS.exe

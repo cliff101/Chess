@@ -3,24 +3,51 @@
 int* HumanPlayer::SelectChess(int playerid)
 {
 	int* pos = new int[2];
-	string temp;
-	cout << "(-1): surrender  ";
+	cout << "(q): surrender  ";
 	cout << "(s): save game  ";
 	cout << "(u): undo  ";
-	cout << "(r): redo  ";
-	cout << "Player: " << playerid << "  Please select a chess (x y):";
-	cin >> temp;
-	if (temp == "s" || temp == "u" || temp == "r") {
-		pos[0] = temp[0];
-		return pos;
+	cout << "(r): redo  \n";
+	HANDLE h;
+	DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
+	h = GetStdHandle(STD_INPUT_HANDLE);
+	GetConsoleMode(h, &fdwModeOld);
+	SetConsoleMode(h, fdwMode);
+	while (true) {
+		INPUT_RECORD in;
+		if (!ReadConsoleInput(h, &in, 1, &NumRead) || NumRead > 1) {
+			continue;
+		}
+		if (in.EventType == KEY_EVENT && in.Event.KeyEvent.bKeyDown == false) {
+			if (in.Event.KeyEvent.wVirtualKeyCode == 0x51) {
+				pos[0] = 'q';
+				SetConsoleMode(h, fdwModeOld);
+				return pos;
+			}
+			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x53) {
+				pos[0] = 's';
+				SetConsoleMode(h, fdwModeOld);
+				return pos;
+			}
+			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x55) {
+				pos[0] = 'u';
+				SetConsoleMode(h, fdwModeOld);
+				return pos;
+			}
+			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x52) {
+				pos[0] = 'r';
+				SetConsoleMode(h, fdwModeOld);
+				return pos;
+			}
+		}
+		else if (in.EventType == MOUSE_EVENT) {
+			if (in.Event.MouseEvent.dwEventFlags == 0) {
+				pos[0] = floor(in.Event.MouseEvent.dwMousePosition.X / 13);
+				pos[1] = floor(in.Event.MouseEvent.dwMousePosition.Y / 7);
+				SetConsoleMode(h, fdwModeOld);
+				return pos;
+			}
+		}
 	}
-
-	pos[0] = stoi(temp);
-	if (pos[0] == -1) {
-		return pos;
-	}
-	cin >> pos[1];
-	return pos;
 }
 
 int HumanPlayer::SelectMoveOption(vector<GameManager::movetype>& avail)
