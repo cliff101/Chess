@@ -286,7 +286,8 @@ void GameManager::MainGame(string filename)
 
 	while (true) {
 		system("cls");
-		board.PrintBoard();//maybe call viewer
+		//board.PrintBoard();//maybe call viewer
+		viewer.print(board.plot);
 		state = 0;
 		if (checkcheck(board, current_player)) {
 			state = 1;
