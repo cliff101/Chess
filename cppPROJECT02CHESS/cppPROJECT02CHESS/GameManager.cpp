@@ -242,17 +242,20 @@ void GameManager::Lobby()
 	DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
 	h = GetStdHandle(STD_INPUT_HANDLE);
 	GetConsoleMode(h, &fdwModeOld);
+	system("cls");
+	cout << "Welcome to CONSOLE CHESS!!" << endl;
+	cout << "1. Play\n2. Load\ne. Exit\n";
 	while (true) {
 		SetConsoleMode(h, fdwMode);
-		system("cls");
-		cout << "Welcome to CONSOLE CHESS!!" << endl;
-		cout << "1. Play\n2. Load\ne. Exit\n";
 		ReadConsoleInput(h, &in, 1, &NumRead);
 
 		if (in.EventType == KEY_EVENT) {
 			if (in.Event.KeyEvent.wVirtualKeyCode == 0x31 || in.Event.KeyEvent.wVirtualKeyCode == 0x61) {
 				SetConsoleMode(h, fdwModeOld);
 				MainGame();
+				system("cls");
+				cout << "Welcome to CONSOLE CHESS!!" << endl;
+				cout << "1. Play\n2. Load\ne. Exit\n";
 			}
 			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x32 || in.Event.KeyEvent.wVirtualKeyCode == 0x62) {
 				SetConsoleMode(h, fdwModeOld);
@@ -260,6 +263,9 @@ void GameManager::Lobby()
 				cout << "load filename:";
 				cin >> filename;
 				MainGame(filename);
+				system("cls");
+				cout << "Welcome to CONSOLE CHESS!!" << endl;
+				cout << "1. Play\n2. Load\ne. Exit\n";
 			}
 			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x45) {
 				SetConsoleMode(h, fdwModeOld);
@@ -297,7 +303,7 @@ void GameManager::MainGame(string filename)
 		ifile.close();
 	}
 	while (true) {
-		system("cls");
+		//system("cls");
 		//board.PrintBoard();//maybe call viewer
 		viewer.print(board.plot);
 		state = 0;
@@ -371,6 +377,9 @@ void GameManager::MainGame(string filename)
 			}
 			continue;
 		}
+		else if (selectedpos[0] == 'f') {
+			continue;
+		}
 		vector<movetype> avail = RequestAvaliStep(board, current_player, new int[2]{ selectedpos[0],selectedpos[1] }, prevmove);
 		if (avail.size() > 0) {
 			selected_move_id = players[current_player]->SelectMoveOption(avail, board.plot[selectedpos[1]][selectedpos[0]].type);
@@ -407,14 +416,11 @@ void GameManager::Result()
 	string temp;
 	if (current_player != -1) {
 		cout << "Player" << (1 - current_player) << " WIN!!!" << endl << "Enter anything to continue:";
-		getline(cin, temp);
-		getline(cin, temp);
 	}
 	else {
 		cout << "Draw!!" << endl << "Enter anything to continue:";
-		getline(cin, temp);
-		getline(cin, temp);
 	}
+	getline(cin, temp);
 }
 
 void GameManager::Printavail(vector<movetype>& in)

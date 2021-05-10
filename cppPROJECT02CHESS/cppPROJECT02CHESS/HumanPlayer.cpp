@@ -1,4 +1,5 @@
 #include "HumanPlayer.h"
+#include <chrono>
 
 int* HumanPlayer::SelectChess(int playerid)
 {
@@ -7,47 +8,75 @@ int* HumanPlayer::SelectChess(int playerid)
 	cout << "(s): save game  ";
 	cout << "(u): undo  ";
 	cout << "(r): redo  ";
+	cout << "(f): fresh  ";
 	cout << "Player: " << playerid << "\n";
 	HANDLE h;
 	DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
 	h = GetStdHandle(STD_INPUT_HANDLE);
 	GetConsoleMode(h, &fdwModeOld);
 	SetConsoleMode(h, fdwMode);
+	auto start = std::chrono::system_clock::now();
+	long long timeleft, timeleftold = 0;
 	while (true) {
 		INPUT_RECORD in;
-		if (!ReadConsoleInput(h, &in, 1, &NumRead) || NumRead > 1) {
-			continue;
+		GetNumberOfConsoleInputEvents(h, &NumRead);
+
+		timeleft = 60 - (std::chrono::system_clock::now() - start).count() / 10000000;
+		if (timeleft != timeleftold) {
+			cout << "(§Ú¬O´ÑÄÁ)Time Left:" << timeleft << '\t';
 		}
-		if (in.EventType == KEY_EVENT && in.Event.KeyEvent.bKeyDown == false) {
-			if (in.Event.KeyEvent.wVirtualKeyCode == 0x51) {
-				pos[0] = 'q';
-				SetConsoleMode(h, fdwModeOld);
-				return pos;
+		if (NumRead > 0) {
+			ReadConsoleInput(h, &in, 1, &NumRead);
+			if (in.EventType == KEY_EVENT && in.Event.KeyEvent.bKeyDown == false) {
+				if (in.Event.KeyEvent.wVirtualKeyCode == 0x51) {
+					pos[0] = 'q';
+					SetConsoleMode(h, fdwModeOld);
+					return pos;
+				}
+				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x53) {
+					pos[0] = 's';
+					SetConsoleMode(h, fdwModeOld);
+					return pos;
+				}
+				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x55) {
+					pos[0] = 'u';
+					SetConsoleMode(h, fdwModeOld);
+					return pos;
+				}
+				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x52) {
+					pos[0] = 'r';
+					SetConsoleMode(h, fdwModeOld);
+					return pos;
+				}
+				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x46) {
+					pos[0] = 'f';
+					SetConsoleMode(h, fdwModeOld);
+					return pos;
+				}
 			}
-			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x53) {
-				pos[0] = 's';
-				SetConsoleMode(h, fdwModeOld);
-				return pos;
-			}
-			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x55) {
-				pos[0] = 'u';
-				SetConsoleMode(h, fdwModeOld);
-				return pos;
-			}
-			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x52) {
-				pos[0] = 'r';
-				SetConsoleMode(h, fdwModeOld);
-				return pos;
+			else if (in.EventType == MOUSE_EVENT) {
+				if (in.Event.MouseEvent.dwEventFlags == 0 && in.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
+					pos[0] = floor(in.Event.MouseEvent.dwMousePosition.X / 13);
+					pos[1] = floor(in.Event.MouseEvent.dwMousePosition.Y / 7);
+					if (pos[0] > 7 || pos[0] < 0 || pos[1]>7 || pos[1] < 0) {
+						continue;
+					}
+					SetConsoleMode(h, fdwModeOld);
+					return pos;
+				}
 			}
 		}
-		else if (in.EventType == MOUSE_EVENT) {
-			if (in.Event.MouseEvent.dwEventFlags == 0 && in.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
-				pos[0] = floor(in.Event.MouseEvent.dwMousePosition.X / 13);
-				pos[1] = floor(in.Event.MouseEvent.dwMousePosition.Y / 7);
-				SetConsoleMode(h, fdwModeOld);
-				return pos;
-			}
+		else if (timeleft <= 0) {
+			pos[0] = 'q';
+			cout << '\n';
+			SetConsoleMode(h, fdwModeOld);
+			return pos;
 		}
+		if (timeleft != timeleftold) {
+			cout << "\r";
+			timeleftold = timeleft;
+		}
+		Sleep(100);
 	}
 }
 

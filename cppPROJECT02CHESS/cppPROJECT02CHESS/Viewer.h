@@ -2,8 +2,6 @@
 #include "Board.h"
 #include <Windows.h>
 
-class Board;
-
 using namespace std;
 
 class Viewer {

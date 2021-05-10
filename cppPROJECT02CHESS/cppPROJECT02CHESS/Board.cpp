@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "Viewer.h"
 
 Board::Board()
 {
@@ -124,17 +125,24 @@ void Board::PrintBoard()
 	}
 }
 
-void Board::MoveChess(int frompos[2], int topos[2])
+void Board::MoveChess(int frompos[2], int topos[2],bool animation)
 {
 	basechess bc = plot[frompos[1]][frompos[0]];
 	bc.moved = true;
 	plot[frompos[1]][frompos[0]] = basechess{};
+	if (animation) {
+		Viewer::print(plot);
+		Sleep(500);
+	}
 	plot[topos[1]][topos[0]] = bc;
+	if (animation) {
+		Viewer::print(plot);
+	}
 }
 Board Board::SimulteMove(int frompos[2], int topos[2])
 {
 	Board sim = *this;
-	sim.MoveChess(frompos, topos);
+	sim.MoveChess(frompos, topos,false);
 	return sim;
 }
 

@@ -5,6 +5,8 @@
 
 using namespace std;
 
+class Viewer;
+
 class Board {
 public:
 	class basechess {
@@ -19,7 +21,7 @@ public:
 	Board operator=(const Board &);
 	void InitBoard();
 	void PrintBoard();
-	void MoveChess(int frompos[2],int topos[2]);
+	void MoveChess(int frompos[2],int topos[2],bool animation = true);
 	void RemoveChess(int pos[2]);
 	void PlaceChess(int pos[2], basechess bc);
 	basechess GetChess(int pos[2]);
