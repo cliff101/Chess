@@ -132,7 +132,6 @@ void Board::MoveChess(int frompos[2], int topos[2],bool animation)
 	plot[frompos[1]][frompos[0]] = basechess{};
 	if (animation) {
 		Viewer::print(plot);
-		Sleep(500);
 	}
 	plot[topos[1]][topos[0]] = bc;
 	if (animation) {

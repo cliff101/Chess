@@ -244,7 +244,7 @@ void GameManager::Lobby()
 	GetConsoleMode(h, &fdwModeOld);
 	system("cls");
 	cout << "Welcome to CONSOLE CHESS!!" << endl;
-	cout << "1. Play\n2. Load\ne. Exit\n";
+	cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
 	while (true) {
 		SetConsoleMode(h, fdwMode);
 		ReadConsoleInput(h, &in, 1, &NumRead);
@@ -255,17 +255,27 @@ void GameManager::Lobby()
 				MainGame();
 				system("cls");
 				cout << "Welcome to CONSOLE CHESS!!" << endl;
-				cout << "1. Play\n2. Load\ne. Exit\n";
+				cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
 			}
 			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x32 || in.Event.KeyEvent.wVirtualKeyCode == 0x62) {
 				SetConsoleMode(h, fdwModeOld);
 				string filename;
-				cout << "load filename:";
+				cout << "please enter load filename:";
 				cin >> filename;
 				MainGame(filename);
 				system("cls");
 				cout << "Welcome to CONSOLE CHESS!!" << endl;
-				cout << "1. Play\n2. Load\ne. Exit\n";
+				cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
+			}
+			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x33 || in.Event.KeyEvent.wVirtualKeyCode == 0x63) {
+				SetConsoleMode(h, fdwModeOld);
+				string filename;
+				cout << "please enter load filename:";
+				cin >> filename;
+				Replay(filename);
+				system("cls");
+				cout << "Welcome to CONSOLE CHESS!!" << endl;
+				cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
 			}
 			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x45) {
 				SetConsoleMode(h, fdwModeOld);
@@ -293,13 +303,23 @@ void GameManager::MainGame(string filename)
 
 	if (filename != "") {
 		ifstream ifile(filename);
-		gamelog gl;
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				ifile.read((char*)&board.plot[i][j], sizeof(board.plot[i][j]));
+
+		int recordnum;
+		ifile.read((char*)&recordnum, sizeof(recordnum));
+		gamerecord.resize(recordnum);
+		for (int k = 0; k < gamerecord.size(); k++) {
+			for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8; j++) {
+					ifile.read((char*)&gamerecord[k].board.plot[i][j], sizeof(gamerecord[k].board.plot[i][j]));
+				}
 			}
+			ifile.read((char*)&gamerecord[k].current_player, sizeof(gamerecord[k].current_player));
 		}
-		ifile.read((char*)&gl.current_player, sizeof(gl.current_player));
+		ifile.read((char*)&current_step, sizeof(current_step));
+
+		board = gamerecord[current_step].board;
+		current_player = gamerecord[current_step].current_player;
+
 		ifile.close();
 	}
 	while (true) {
@@ -348,16 +368,22 @@ void GameManager::MainGame(string filename)
 		}
 		else if (selectedpos[0] == 's') {
 			string filename;
-			cout << "save filename:";
+			cout << "please enter save filename:";
 			cin >> filename;
 			ofstream ofile(filename);
-			gamelog gl{ board,current_player };
-			for (int i = 0; i < 8; i++) {
-				for (int j = 0; j < 8; j++) {
-					ofile.write((char*)&board.plot[i][j], sizeof(board.plot[i][j]));
+
+			int recordnum = gamerecord.size();
+			ofile.write((char*)&recordnum, sizeof(recordnum));
+			for (int k = 0; k < gamerecord.size(); k++) {
+				for (int i = 0; i < 8; i++) {
+					for (int j = 0; j < 8; j++) {
+						ofile.write((char*)&gamerecord[k].board.plot[i][j], sizeof(gamerecord[k].board.plot[i][j]));
+					}
 				}
+				ofile.write((char*)&gamerecord[k].current_player, sizeof(gamerecord[k].current_player));
 			}
-			ofile.write((char*)&gl.current_player, sizeof(gl.current_player));
+			ofile.write((char*)&current_step, sizeof(current_step));
+
 			ofile.close();
 			continue;
 		}
@@ -413,13 +439,70 @@ void GameManager::MainGame(string filename)
 
 void GameManager::Result()
 {
-	string temp;
+	gamerecord.push_back(gamelog(board, current_player));
+	string filename;
 	if (current_player != -1) {
-		cout << "Player" << (1 - current_player) << " WIN!!!" << endl << "Enter anything to continue:";
+		cout << "Player" << (1 - current_player) << " WIN!!!\t\t\t\t\t\t" << endl;
 	}
 	else {
-		cout << "Draw!!" << endl << "Enter anything to continue:";
+		cout << "Draw!!\t\t\t\t\t\t" << endl;
 	}
+	cout << "Enter nothing to continue, or enter filename to save:";
+	getline(cin,filename);
+	if (filename != "") {
+		ofstream ofile(filename);
+
+		int recordnum = gamerecord.size();
+		ofile.write((char*)&recordnum, sizeof(recordnum));
+		for (int k = 0; k < gamerecord.size(); k++) {
+			for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8; j++) {
+					ofile.write((char*)&gamerecord[k].board.plot[i][j], sizeof(gamerecord[k].board.plot[i][j]));
+				}
+			}
+			ofile.write((char*)&gamerecord[k].current_player, sizeof(gamerecord[k].current_player));
+		}
+		recordnum--;
+		ofile.write((char*)&recordnum, sizeof(recordnum));
+
+		ofile.close();
+	}
+}
+
+void GameManager::Replay(string filename)
+{
+	ifstream ifile(filename);
+
+	int recordnum, current_step;
+	ifile.read((char*)&recordnum, sizeof(recordnum));
+	gamerecord.resize(recordnum);
+	for (int k = 0; k < gamerecord.size(); k++) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				ifile.read((char*)&gamerecord[k].board.plot[i][j], sizeof(gamerecord[k].board.plot[i][j]));
+			}
+		}
+		ifile.read((char*)&gamerecord[k].current_player, sizeof(gamerecord[k].current_player));
+	}
+	ifile.read((char*)&current_step, sizeof(current_step));
+
+	ifile.close();
+
+	for (int i = 0; i <= current_step; i++) {
+		board = gamerecord[i].board;
+		current_player = gamerecord[i].current_player;
+		Viewer::print(board.plot);
+		Sleep(500);
+	}
+	if (current_player != -1) {
+		cout << "Player" << (1 - current_player) << " WIN!!!\t\t\t\t\t\t" << endl;
+	}
+	else {
+		cout << "Draw!!\t\t\t\t\t\t" << endl;
+	}
+	string temp;
+	cout << "Replay End.\nEnter anything to continue:";
+	getline(cin, temp);
 	getline(cin, temp);
 }
 

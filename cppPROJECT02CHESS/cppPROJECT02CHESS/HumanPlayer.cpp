@@ -23,33 +23,38 @@ int* HumanPlayer::SelectChess(int playerid)
 
 		timeleft = 60 - (std::chrono::system_clock::now() - start).count() / 10000000;
 		if (timeleft != timeleftold) {
-			cout << "(㏀촑닌컨)Time Left:" << timeleft << '\t';
+			cout << "(㏀촑닌컨)Time Left:" << timeleft << "\t\t\t\t\t\t";
 		}
 		if (NumRead > 0) {
 			ReadConsoleInput(h, &in, 1, &NumRead);
 			if (in.EventType == KEY_EVENT && in.Event.KeyEvent.bKeyDown == false) {
 				if (in.Event.KeyEvent.wVirtualKeyCode == 0x51) {
 					pos[0] = 'q';
+					cout << "\r";
 					SetConsoleMode(h, fdwModeOld);
 					return pos;
 				}
 				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x53) {
 					pos[0] = 's';
+					cout << "\r";
 					SetConsoleMode(h, fdwModeOld);
 					return pos;
 				}
 				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x55) {
 					pos[0] = 'u';
+					cout << "\r";
 					SetConsoleMode(h, fdwModeOld);
 					return pos;
 				}
 				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x52) {
 					pos[0] = 'r';
 					SetConsoleMode(h, fdwModeOld);
+					cout << "\r";
 					return pos;
 				}
 				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x46) {
 					pos[0] = 'f';
+					cout << "\r";
 					SetConsoleMode(h, fdwModeOld);
 					return pos;
 				}
@@ -58,6 +63,7 @@ int* HumanPlayer::SelectChess(int playerid)
 				if (in.Event.MouseEvent.dwEventFlags == 0 && in.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
 					pos[0] = floor(in.Event.MouseEvent.dwMousePosition.X / 13);
 					pos[1] = floor(in.Event.MouseEvent.dwMousePosition.Y / 7);
+					cout << "\r";
 					if (pos[0] > 7 || pos[0] < 0 || pos[1]>7 || pos[1] < 0) {
 						continue;
 					}
@@ -68,6 +74,7 @@ int* HumanPlayer::SelectChess(int playerid)
 		}
 		else if (timeleft <= 0) {
 			pos[0] = 'q';
+			cout << "\r";
 			cout << '\n';
 			SetConsoleMode(h, fdwModeOld);
 			return pos;
@@ -76,7 +83,7 @@ int* HumanPlayer::SelectChess(int playerid)
 			cout << "\r";
 			timeleftold = timeleft;
 		}
-		Sleep(100);
+		Sleep(10);
 	}
 }
 

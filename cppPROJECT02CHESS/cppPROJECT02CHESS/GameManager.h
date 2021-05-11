@@ -48,6 +48,7 @@ private:
 	void Lobby();
 	void MainGame(string filename = "");
 	void Result();
+	void Replay(string filename);
 
 	bool checkcheck(Board& board,int which_player);
 	int* getkingpos(Board& inboard, int which_player);
