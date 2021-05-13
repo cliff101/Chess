@@ -1,14 +1,15 @@
 #include "GameManager.h"
 #include "Player.h"
 #include "HumanPlayer.h"
+#include "AIPlayer.h"
 
-map<int, string> GameManager::movetype::typeint2str = { {0,"normal"},{1,"eat"},{2,"castling"},{3,"soldier1stmove"},{4,"passeat"} };
-map<string, int> GameManager::movetype::typestr2int = { {"normal",0},{"eat",1},{"castling",2},{"soldier1stmove",3},{"passeat",4} };
+std::map<int, std::string> GameManager::movetype::typeint2str = { {0,"normal"},{1,"eat"},{2,"castling"},{3,"soldier1stmove"},{4,"passeat"} };
+std::map<std::string, int> GameManager::movetype::typestr2int = { {"normal",0},{"eat",1},{"castling",2},{"soldier1stmove",3},{"passeat",4} };
 
 
-vector<GameManager::movetype> GameManager::RequestAvaliStep(Board& inboard, int req_player, int pos[2], GameManager::movetype prevplayermovetype, bool kingcheck)
+std::vector<GameManager::movetype> GameManager::RequestAvaliStep(Board& inboard, int req_player, int pos[2], GameManager::movetype prevplayermovetype, bool kingcheck)
 {
-	vector<movetype> avail;
+	std::vector<movetype> avail;
 	Board::basechess selected = inboard.plot[pos[1]][pos[0]];
 	if (selected.turn != req_player || req_player != 0 && req_player != 1) {
 		return avail;
@@ -229,12 +230,45 @@ vector<GameManager::movetype> GameManager::RequestAvaliStep(Board& inboard, int 
 	return avail;
 }
 
+void PrintDragon() {
+	std::cout << R"V0G0N(
+                                                                  %####/               
+                                                                %##&%&%%%(,            
+                   *   #(#/*                                   .%%&%%%&%%%%&           
+                       *###(##     .. . /                     &#&%%%%%#%%%%%%          
+                        &(##%%%&#%&(#%%%.&/&. .            %%(%&&%%%%(#%#%%%##         
+                          .##((#/%/&%%%%#&&%%   #%#,      %%#&%%####(%#(##/%##(        
+                         %. (% /%&(&%%%%#%(#%#%%%#&((#   %##%#####((##(#((#(###(       
+                        #&#%&&%%%&%%#&#/&%(##%#%#%%%%#%%%#&%%((//(#((#(/((/(((#%#      
+                     //%%%%%&/&#%&((&%%(%##%((#%%(%%%%%&%%#(%#(*/((((*((/(((/((###     
+                  *%%%&%%%#(##%&% *  %%&#(&%%%##%%#%%&&%%###(/((/**///*#(**(//(#(/#    
+                 %%&%%/&%##%(%*/#(   *..%%##(%&%%%#%%&&&%%%((/*((/**///*////(*//(#(    
+             ,%%%/%%%((#&&&#(#*/((#*#%%%#((/%(##%%&&(###&&%#/((/((////(**/(/////(/(    
+              %*///#,*(@&*#(( .         /   *&%%/&%%((((#%&%(     . /(.#(//(/(//((     
+                   /%(#,*.                  & %%(//##/#%&%%##         #  #(#/(///(.    
+                  %%#*                       ##%#((/#%#%%%%..             ( .#(#/(/    
+                                             .*&%%%((%%&&%% %                 #(#(.    
+                                              %  .  //%%%%#.                  ##.(     
+                                                     *//(&%&#                 %. .     
+                            WELCOME TO                //*%%#,                 % %      
+                          CONSOLE CHESS!!             //*%%%                 ,         
+                                                      ./(&#                            
+                                                      /%%#.                            
+                                                    (/&&#                              
+                                #%######%,#      /(%%/                                 
+                             %(#%%%%&&&&&%%%%%%&%./                                    
+                            #%%%%%%%&                                                  
+                          .( . 
+
+
+
+)V0G0N";
+}
 
 void GameManager::StartGame()
 {
 	Lobby();
 }
-
 void GameManager::Lobby()
 {
 	HANDLE h;
@@ -243,8 +277,8 @@ void GameManager::Lobby()
 	h = GetStdHandle(STD_INPUT_HANDLE);
 	GetConsoleMode(h, &fdwModeOld);
 	system("cls");
-	cout << "Welcome to CONSOLE CHESS!!" << endl;
-	cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
+	PrintDragon();
+	std::cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
 	while (true) {
 		SetConsoleMode(h, fdwMode);
 		ReadConsoleInput(h, &in, 1, &NumRead);
@@ -254,28 +288,28 @@ void GameManager::Lobby()
 				SetConsoleMode(h, fdwModeOld);
 				MainGame();
 				system("cls");
-				cout << "Welcome to CONSOLE CHESS!!" << endl;
-				cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
+				PrintDragon();
+				std::cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
 			}
-			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x32 || in.Event.KeyEvent.wVirtualKeyCode == 0x62) {
+			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x32 || in.Event.KeyEvent.wVirtualKeyCode == 0x62 || in.Event.KeyEvent.wVirtualKeyCode == 0x33 || in.Event.KeyEvent.wVirtualKeyCode == 0x63) {
+				_mkdir("gamedata");
+				for (auto f : std::filesystem::directory_iterator("gamedata")) {
+					std::cout << std::filesystem::path(f.path()).filename() << std::endl;
+				}
 				SetConsoleMode(h, fdwModeOld);
-				string filename;
-				cout << "please enter load filename:";
-				cin >> filename;
-				MainGame(filename);
+				std::string filename;
+				std::cout << "please enter load filename:";
+				std::cin >> filename;
+				filename = "./gamedata/" + filename;
+				if (in.Event.KeyEvent.wVirtualKeyCode == 0x32 || in.Event.KeyEvent.wVirtualKeyCode == 0x62) {
+					MainGame(filename);
+				}
+				else {
+					Replay(filename);
+				}
 				system("cls");
-				cout << "Welcome to CONSOLE CHESS!!" << endl;
-				cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
-			}
-			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x33 || in.Event.KeyEvent.wVirtualKeyCode == 0x63) {
-				SetConsoleMode(h, fdwModeOld);
-				string filename;
-				cout << "please enter load filename:";
-				cin >> filename;
-				Replay(filename);
-				system("cls");
-				cout << "Welcome to CONSOLE CHESS!!" << endl;
-				cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
+				PrintDragon();
+				std::cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
 			}
 			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x45) {
 				SetConsoleMode(h, fdwModeOld);
@@ -285,7 +319,7 @@ void GameManager::Lobby()
 	}
 }
 
-void GameManager::MainGame(string filename)
+void GameManager::MainGame(std::string filename)
 {
 	board.InitBoard();
 	srand(time(NULL));
@@ -296,13 +330,13 @@ void GameManager::MainGame(string filename)
 	int* selectedpos;
 	movetype prevmove;
 	players[0] = new HumanPlayer{};
-	players[1] = new HumanPlayer{};
+	players[1] = new AIPlayer{};
 
 	int current_step = 0;
 	gamerecord.push_back(gamelog(board, current_player));
 
 	if (filename != "") {
-		ifstream ifile(filename);
+		std::ifstream ifile(filename);
 
 		int recordnum;
 		ifile.read((char*)&recordnum, sizeof(recordnum));
@@ -334,7 +368,7 @@ void GameManager::MainGame(string filename)
 			for (int i = 0; !found && i < 8; i++) {
 				for (int j = 0; !found && j < 8; j++) {
 					if (board.plot[i][j].turn == current_player) {
-						vector<movetype> avail = RequestAvaliStep(board, current_player, new int[2]{ j,i }, movetype{});
+						std::vector<movetype> avail = RequestAvaliStep(board, current_player, new int[2]{ j,i }, movetype{});
 						for (int k = 0; k < avail.size(); k++) {
 							Board temp2 = board.SimulteMove(new int[2]{ j,i }, avail[k].pos);
 							if (!checkcheck(temp2, current_player)) {
@@ -362,15 +396,16 @@ void GameManager::MainGame(string filename)
 			current_player = -1;
 			break;
 		}
-		selectedpos = players[current_player]->SelectChess(current_player);
+		selectedpos = players[current_player]->SelectChess(board,current_player);
 		if (selectedpos[0] == 'q') {
 			break;
 		}
 		else if (selectedpos[0] == 's') {
-			string filename;
-			cout << "please enter save filename:";
-			cin >> filename;
-			ofstream ofile(filename);
+			std::string filename;
+			std::cout << "please enter save filename:";
+			std::cin >> filename;
+			_mkdir("gamedata");
+			std::ofstream ofile("./gamedata/"+filename);
 
 			int recordnum = gamerecord.size();
 			ofile.write((char*)&recordnum, sizeof(recordnum));
@@ -406,7 +441,7 @@ void GameManager::MainGame(string filename)
 		else if (selectedpos[0] == 'f') {
 			continue;
 		}
-		vector<movetype> avail = RequestAvaliStep(board, current_player, new int[2]{ selectedpos[0],selectedpos[1] }, prevmove);
+		std::vector<movetype> avail = RequestAvaliStep(board, current_player, new int[2]{ selectedpos[0],selectedpos[1] }, prevmove);
 		if (avail.size() > 0) {
 			selected_move_id = players[current_player]->SelectMoveOption(avail, board.plot[selectedpos[1]][selectedpos[0]].type);
 			if (selected_move_id < avail.size()) {
@@ -440,17 +475,17 @@ void GameManager::MainGame(string filename)
 void GameManager::Result()
 {
 	gamerecord.push_back(gamelog(board, current_player));
-	string filename;
+	std::string filename;
 	if (current_player != -1) {
-		cout << "Player" << (1 - current_player) << " WIN!!!\t\t\t\t\t\t" << endl;
+		std::cout << "Player" << (1 - current_player) << " WIN!!!\t\t\t\t\t\t" << std::endl;
 	}
 	else {
-		cout << "Draw!!\t\t\t\t\t\t" << endl;
+		std::cout << "Draw!!\t\t\t\t\t\t" << std::endl;
 	}
-	cout << "Enter nothing to continue, or enter filename to save:";
-	getline(cin,filename);
+	std::cout << "Enter nothing to continue, or enter filename to save:";
+	getline(std::cin,filename);
 	if (filename != "") {
-		ofstream ofile(filename);
+		std::ofstream ofile(filename);
 
 		int recordnum = gamerecord.size();
 		ofile.write((char*)&recordnum, sizeof(recordnum));
@@ -469,9 +504,9 @@ void GameManager::Result()
 	}
 }
 
-void GameManager::Replay(string filename)
+void GameManager::Replay(std::string filename)
 {
-	ifstream ifile(filename);
+	std::ifstream ifile(filename);
 
 	int recordnum, current_step;
 	ifile.read((char*)&recordnum, sizeof(recordnum));
@@ -495,21 +530,21 @@ void GameManager::Replay(string filename)
 		Sleep(500);
 	}
 	if (current_player != -1) {
-		cout << "Player" << (1 - current_player) << " WIN!!!\t\t\t\t\t\t" << endl;
+		std::cout << "Player" << (1 - current_player) << " WIN!!!\t\t\t\t\t\t" << std::endl;
 	}
 	else {
-		cout << "Draw!!\t\t\t\t\t\t" << endl;
+		std::cout << "Draw!!\t\t\t\t\t\t" << std::endl;
 	}
-	string temp;
-	cout << "Replay End.\nEnter anything to continue:";
-	getline(cin, temp);
-	getline(cin, temp);
+	std::string temp;
+	std::cout << "Replay End.\nEnter anything to continue:";
+	getline(std::cin, temp);
+	getline(std::cin, temp);
 }
 
-void GameManager::Printavail(vector<movetype>& in)
+void GameManager::Printavail(std::vector<movetype>& in)
 {
 	for (int i = 0; i < in.size(); i++) {
-		cout << to_string(i) + ".  X: " << in[i].pos[0] << "  Y: " << in[i].pos[1] << "  Type: " << movetype::typeint2str[in[i].type] << endl;
+		std::cout << std::to_string(i) + ".  X: " << in[i].pos[0] << "  Y: " << in[i].pos[1] << "  Type: " << movetype::typeint2str[in[i].type] << std::endl;
 	}
 }
 
@@ -518,7 +553,7 @@ bool GameManager::checkcheck(Board& inboard, int which_player) {
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			if (inboard.plot[i][j].turn == (1 - which_player)) {
-				vector<movetype> avail = RequestAvaliStep(inboard, (1 - which_player), new int[2]{ j,i }, movetype{}, false);
+				std::vector<movetype> avail = RequestAvaliStep(inboard, (1 - which_player), new int[2]{ j,i }, movetype{}, false);
 				for (int k = 0; k < avail.size(); k++) {
 					if (movetype::typeint2str[avail[k].type] == "eat" && avail[k].pos[0] == kingpos[0] && avail[k].pos[1] == kingpos[1]) {
 						return true;

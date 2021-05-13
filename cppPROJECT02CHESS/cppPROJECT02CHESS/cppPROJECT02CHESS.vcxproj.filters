@@ -33,6 +33,9 @@
     <ClCompile Include="Board.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="AIPlayer.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h">
@@ -48,6 +51,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="Board.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="AIPlayer.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

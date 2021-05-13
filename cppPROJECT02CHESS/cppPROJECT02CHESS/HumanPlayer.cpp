@@ -1,15 +1,15 @@
 #include "HumanPlayer.h"
 #include <chrono>
 
-int* HumanPlayer::SelectChess(int playerid)
+int* HumanPlayer::SelectChess(Board& const board, int playerid)
 {
 	int* pos = new int[2];
-	cout << "(q): surrender  ";
-	cout << "(s): save game  ";
-	cout << "(u): undo  ";
-	cout << "(r): redo  ";
-	cout << "(f): fresh  ";
-	cout << "Player: " << playerid << "\n";
+	std::cout << "(q): surrender  ";
+	std::cout << "(s): save game  ";
+	std::cout << "(u): undo  ";
+	std::cout << "(r): redo  ";
+	std::cout << "(f): fresh  ";
+	std::cout << "Player: " << playerid << "\n";
 	HANDLE h;
 	DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
 	h = GetStdHandle(STD_INPUT_HANDLE);
@@ -23,38 +23,38 @@ int* HumanPlayer::SelectChess(int playerid)
 
 		timeleft = 60 - (std::chrono::system_clock::now() - start).count() / 10000000;
 		if (timeleft != timeleftold) {
-			cout << "(我是棋鐘)Time Left:" << timeleft << "\t\t\t\t\t\t";
+			std::cout << "(我是棋鐘)Time Left:" << timeleft << "\t\t\t\t\t\t";
 		}
 		if (NumRead > 0) {
 			ReadConsoleInput(h, &in, 1, &NumRead);
 			if (in.EventType == KEY_EVENT && in.Event.KeyEvent.bKeyDown == false) {
 				if (in.Event.KeyEvent.wVirtualKeyCode == 0x51) {
 					pos[0] = 'q';
-					cout << "\r";
+					std::cout << "\r";
 					SetConsoleMode(h, fdwModeOld);
 					return pos;
 				}
 				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x53) {
 					pos[0] = 's';
-					cout << "\r";
+					std::cout << "\r";
 					SetConsoleMode(h, fdwModeOld);
 					return pos;
 				}
 				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x55) {
 					pos[0] = 'u';
-					cout << "\r";
+					std::cout << "\r";
 					SetConsoleMode(h, fdwModeOld);
 					return pos;
 				}
 				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x52) {
 					pos[0] = 'r';
 					SetConsoleMode(h, fdwModeOld);
-					cout << "\r";
+					std::cout << "\r";
 					return pos;
 				}
 				else if (in.Event.KeyEvent.wVirtualKeyCode == 0x46) {
 					pos[0] = 'f';
-					cout << "\r";
+					std::cout << "\r";
 					SetConsoleMode(h, fdwModeOld);
 					return pos;
 				}
@@ -63,7 +63,7 @@ int* HumanPlayer::SelectChess(int playerid)
 				if (in.Event.MouseEvent.dwEventFlags == 0 && in.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
 					pos[0] = floor(in.Event.MouseEvent.dwMousePosition.X / 13);
 					pos[1] = floor(in.Event.MouseEvent.dwMousePosition.Y / 7);
-					cout << "\r";
+					std::cout << "\r";
 					if (pos[0] > 7 || pos[0] < 0 || pos[1]>7 || pos[1] < 0) {
 						continue;
 					}
@@ -74,20 +74,20 @@ int* HumanPlayer::SelectChess(int playerid)
 		}
 		else if (timeleft <= 0) {
 			pos[0] = 'q';
-			cout << "\r";
-			cout << '\n';
+			std::cout << "\r";
+			std::cout << '\n';
 			SetConsoleMode(h, fdwModeOld);
 			return pos;
 		}
 		if (timeleft != timeleftold) {
-			cout << "\r";
+			std::cout << "\r";
 			timeleftold = timeleft;
 		}
 		Sleep(10);
 	}
 }
 
-int HumanPlayer::SelectMoveOption(vector<GameManager::movetype>& avail, int selectedchesstype)
+int HumanPlayer::SelectMoveOption(std::vector<GameManager::movetype>& avail, int selectedchesstype)
 {
 	int selected_move_id;
 
@@ -121,33 +121,11 @@ int HumanPlayer::SelectMoveOption(vector<GameManager::movetype>& avail, int sele
 	}
 }
 
-void HumanPlayer::OnMove(Board& const board, int* frompos, GameManager::movetype to)
-{
-	if (GameManager::movetype::typeint2str[to.type] == "passeat") {
-		board.RemoveChess(new int[2]{ to.pos[0],frompos[1] });
-	}
-	if (GameManager::movetype::typeint2str[to.type] == "castling") {
-		if (to.pos[0] == 6) {//短易位
-			board.MoveChess(new int[2]{ 7,frompos[1] }, new int[2]{ 5,frompos[1] });
-		}
-		else {//長易位
-			board.MoveChess(new int[2]{ 0,frompos[1] }, new int[2]{ 3,frompos[1] });
-		}
-
-	}
-	board.MoveChess(frompos, to.pos);
-}
-
-void HumanPlayer::OnPromote(Board& const board, int Pos[2], Board::basechess outchess)
-{
-	board.PlaceChess(Pos, outchess);
-}
-
 int HumanPlayer::SelectPromote(Board& const board, int Pos[2])
 {
 	int selected;
 	for (int i = 2; i < 6; i++) {
-		cout << i - 2 << ". " << board.typeint2str[i] << endl;
+		std::cout << i - 2 << ". " << board.typeint2str[i] << "\t\t\t\t\t\t" << std::endl;
 	}
 	HANDLE h;
 	DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
@@ -172,6 +150,27 @@ int HumanPlayer::SelectPromote(Board& const board, int Pos[2])
 			}
 		}
 	}
-	cin >> selected;
+	std::cin >> selected;
 	return selected + 2;
+}
+
+void HumanPlayer::OnMove(Board& const board, int* frompos, GameManager::movetype to)
+{
+	if (GameManager::movetype::typeint2str[to.type] == "passeat") {
+		board.RemoveChess(new int[2]{ to.pos[0],frompos[1] });
+	}
+	if (GameManager::movetype::typeint2str[to.type] == "castling") {
+		if (to.pos[0] == 6) {//短易位
+			board.MoveChess(new int[2]{ 7,frompos[1] }, new int[2]{ 5,frompos[1] });
+		}
+		else {//長易位
+			board.MoveChess(new int[2]{ 0,frompos[1] }, new int[2]{ 3,frompos[1] });
+		}
+
+	}
+	board.MoveChess(frompos, to.pos);
+}
+void HumanPlayer::OnPromote(Board& const board, int Pos[2], Board::basechess outchess)
+{
+	board.PlaceChess(Pos, outchess);
 }

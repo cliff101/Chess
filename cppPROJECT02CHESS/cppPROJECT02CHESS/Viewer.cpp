@@ -62,17 +62,17 @@ void Viewer::printOneChess(int chesstype, const int pos[2], int turn, int type) 
 		gotoxy(pos[0] * 13, pos[1] * 7);
 		SetColor(selectcolor);
 		for (int i = 0; i < 13; i++) {
-			cout << " ";
+			std::cout << " ";
 		}
 		gotoxy(pos[0] * 13, pos[1] * 7 + 6);
 		for (int i = 0; i < 13; i++) {
-			cout << " ";
+			std::cout << " ";
 		}
 		for (int i = 1; i < 6; i++) {
 			gotoxy(pos[0] * 13, pos[1] * 7 + i);
-			cout << "  ";
+			std::cout << "  ";
 			gotoxy(pos[0] * 13 + 11, pos[1] * 7 + i);
-			cout << "  ";
+			std::cout << "  ";
 		}
 		SetColor();
 		gotoxy(0, 57);
@@ -124,7 +124,7 @@ void Viewer::printOneChess(int chesstype, const int pos[2], int turn, int type) 
 	for (int i = 0; i < 7; i++) {
 		for (int j = 0; j < 13; j++) {
 			SetColor(color[i][j]);
-			cout << " ";
+			std::cout << " ";
 		}
 		gotoxy(pos[1] * 13, pos[0] * 7 + i + 1);
 	}

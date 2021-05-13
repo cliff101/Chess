@@ -109,19 +109,19 @@ void Board::PrintBoard()
 {
 	for (int i = 0; i < 9; i++) {
 		if (i > 0) {
-			cout << i - 1 << "\t\t";
+			std::cout << i - 1 << "\t\t";
 		}
 		else {
-			cout << "\t\t";
+			std::cout << "\t\t";
 		}
 	}
-	cout << endl;
+	std::cout << std::endl;
 	for (int i = 0; i < 8; i++) {
-		cout << i << "\t\t";
+		std::cout << i << "\t\t";
 		for (int j = 0; j < 8; j++) {
-			cout << plot[i][j].turn<<"\t"<< typeint2str[plot[i][j].type]<<"\t";
+			std::cout << plot[i][j].turn<<"\t"<< typeint2str[plot[i][j].type]<<"\t";
 		}
-		cout << endl;
+		std::cout << std::endl;
 	}
 }
 

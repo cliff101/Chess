@@ -2,7 +2,7 @@
 #include "Board.h"
 #include <Windows.h>
 
-using namespace std;
+//using namespace std;
 
 class Viewer {
 public:

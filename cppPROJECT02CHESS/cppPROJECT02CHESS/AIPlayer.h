@@ -3,7 +3,7 @@
 #include "GameManager.h"
 #include "Board.h"
 
-class HumanPlayer :public Player {
+class AIPlayer :public Player {
 public:
 	virtual int* SelectChess(Board& const board, int playerid) override;
 	virtual int SelectMoveOption(std::vector<GameManager::movetype>& avail, int selectedchesstype) override;

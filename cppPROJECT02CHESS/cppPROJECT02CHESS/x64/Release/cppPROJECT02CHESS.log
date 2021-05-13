@@ -27,9 +27,9 @@ C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\AIPlayer.h(10,40): warning C4227: 過時的用法: 已忽略參考上的限定詞
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\AIPlayer.h(11,43): warning C4227: 過時的用法: 已忽略參考上的限定詞
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\AIPlayer.h(12,46): warning C4227: 過時的用法: 已忽略參考上的限定詞
-C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(324,12): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
-C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(409,37): warning C4267: '正在初始化': 將 'size_t' 轉換為 'int'，資料可能遺失
-C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(489,36): warning C4267: '正在初始化': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(325,12): warning C4244: '引數': 將 'time_t' 轉換為 'unsigned int'，由於類型不同，可能導致資料遺失
+C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(410,37): warning C4267: '正在初始化': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(490,36): warning C4267: '正在初始化': 將 'size_t' 轉換為 'int'，資料可能遺失
   HumanPlayer.cpp
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(10,40): warning C4227: 過時的用法: 已忽略參考上的限定詞
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(11,43): warning C4227: 過時的用法: 已忽略參考上的限定詞
@@ -51,6 +51,9 @@ C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(11,43): warning C4227: 過時的用法: 已忽略參考上的限定詞
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(13,45): warning C4227: 過時的用法: 已忽略參考上的限定詞
 C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\Player.h(14,46): warning C4227: 過時的用法: 已忽略參考上的限定詞
-  正在產生程式碼...
-C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(575): warning C4715: 'GameManager::getkingpos': 不是所有控制路徑都傳回值
-  cppPROJECT02CHESS.vcxproj -> C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\x64\Debug\cppPROJECT02CHESS.exe
+  正在產生程式碼
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\cppPROJECT02CHESS\GameManager.cpp(576): warning C4715: 'GameManager::getkingpos': 不是所有控制路徑都傳回值
+  All 929 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成程式碼產生
+  cppPROJECT02CHESS.vcxproj -> C:\Users\cliffsu\Documents\CPPlang\PROJECT02\cppPROJECT02CHESS\x64\Release\cppPROJECT02CHESS.exe

@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
 
 class Viewer;
 
@@ -26,8 +25,8 @@ public:
 	void PlaceChess(int pos[2], basechess bc);
 	basechess GetChess(int pos[2]);
 	basechess** plot;//player0 的棋子在下面
-	map<string, int> typestr2int;
-	map<int, string> typeint2str;
+	std::map<std::string, int> typestr2int;
+	std::map<int, std::string> typeint2str;
 	Board SimulteMove(int frompos[2], int topos[2]);
 private:
 };
