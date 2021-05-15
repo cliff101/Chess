@@ -53,6 +53,13 @@ Board::Board(const Board& in)
 	}
 }
 
+Board::~Board()
+{
+	for (int i = 0; i < 8; i++) {
+		delete[] plot[i];
+	}
+}
+
 Board Board::operator=(const Board& in)
 {
 	plot = new basechess * [8];

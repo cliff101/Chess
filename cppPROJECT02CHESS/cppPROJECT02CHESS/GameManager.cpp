@@ -1,7 +1,8 @@
 #include "GameManager.h"
 #include "Player.h"
 #include "HumanPlayer.h"
-#include "AIPlayer.h"
+#include "RandAIPlayer.h"
+#include "WeekAIPlayer.h"
 
 std::map<int, std::string> GameManager::movetype::typeint2str = { {0,"normal"},{1,"eat"},{2,"castling"},{3,"soldier1stmove"},{4,"passeat"} };
 std::map<std::string, int> GameManager::movetype::typestr2int = { {"normal",0},{"eat",1},{"castling",2},{"soldier1stmove",3},{"passeat",4} };
@@ -16,7 +17,7 @@ std::vector<GameManager::movetype> GameManager::RequestAvaliStep(Board& inboard,
 	}
 	else if (inboard.typeint2str[selected.type] == "soldier") {
 		if (!selected.moved) {
-			if (inboard.plot[pos[1] + 2 * (req_player == 0 ? -1 : 1)][pos[0]].type == 0) {
+			if (inboard.plot[pos[1] + 2 * (req_player == 0 ? -1 : 1)][pos[0]].type == 0 && inboard.plot[pos[1] + 1 * (req_player == 0 ? -1 : 1)][pos[0]].type == 0) {
 				avail.push_back(movetype{ 3,{pos[0],pos[1] + 2 * (req_player == 0 ? -1 : 1) } });
 			}
 			if (inboard.plot[pos[1] + 1 * (req_player == 0 ? -1 : 1)][pos[0]].type == 0) {
@@ -283,16 +284,42 @@ void GameManager::Lobby()
 		SetConsoleMode(h, fdwMode);
 		ReadConsoleInput(h, &in, 1, &NumRead);
 
-		if (in.EventType == KEY_EVENT) {
+		if (in.EventType == KEY_EVENT && in.Event.KeyEvent.bKeyDown == false) {
 			if (in.Event.KeyEvent.wVirtualKeyCode == 0x31 || in.Event.KeyEvent.wVirtualKeyCode == 0x61) {
 				SetConsoleMode(h, fdwModeOld);
-				MainGame();
+				int aitype = 0;
+				HANDLE h;
+				INPUT_RECORD in;
+				DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
+				h = GetStdHandle(STD_INPUT_HANDLE);
+				GetConsoleMode(h, &fdwModeOld);
+				std::cout << "\nPlayer 1?\n1. Random AI\n2. Week AI\n3. Human\n";
+				while (true) {
+					SetConsoleMode(h, fdwMode);
+					ReadConsoleInput(h, &in, 1, &NumRead);
+					if (in.EventType == KEY_EVENT && in.Event.KeyEvent.bKeyDown == false) {
+						if (in.Event.KeyEvent.wVirtualKeyCode == 0x31 || in.Event.KeyEvent.wVirtualKeyCode == 0x61) {
+							aitype = 0;
+							break;
+						}
+						else if (in.Event.KeyEvent.wVirtualKeyCode == 0x32 || in.Event.KeyEvent.wVirtualKeyCode == 0x62) {
+							aitype = 1;
+							break;
+						}
+						else if (in.Event.KeyEvent.wVirtualKeyCode == 0x33 || in.Event.KeyEvent.wVirtualKeyCode == 0x63) {
+							aitype = -1;
+							break;
+						}
+					}
+				}
+				MainGame("", aitype);
 				system("cls");
 				PrintDragon();
 				std::cout << "1. Play\n2. Load\n3. Replay\ne. Exit\n";
 			}
 			else if (in.Event.KeyEvent.wVirtualKeyCode == 0x32 || in.Event.KeyEvent.wVirtualKeyCode == 0x62 || in.Event.KeyEvent.wVirtualKeyCode == 0x33 || in.Event.KeyEvent.wVirtualKeyCode == 0x63) {
 				_mkdir("gamedata");
+				std::cout << "\n";
 				for (auto f : std::filesystem::directory_iterator("gamedata")) {
 					std::cout << std::filesystem::path(f.path()).filename() << std::endl;
 				}
@@ -302,7 +329,32 @@ void GameManager::Lobby()
 				std::cin >> filename;
 				filename = "./gamedata/" + filename;
 				if (in.Event.KeyEvent.wVirtualKeyCode == 0x32 || in.Event.KeyEvent.wVirtualKeyCode == 0x62) {
-					MainGame(filename);
+					int aitype = 0;
+					HANDLE h;
+					INPUT_RECORD in;
+					DWORD NumRead, fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT, fdwModeOld;
+					h = GetStdHandle(STD_INPUT_HANDLE);
+					GetConsoleMode(h, &fdwModeOld);
+					std::cout << "\nPlayer 1?\n1. Random AI\n2. Week AI\n3. Human\n";
+					while (true) {
+						SetConsoleMode(h, fdwMode);
+						ReadConsoleInput(h, &in, 1, &NumRead);
+						if (in.EventType == KEY_EVENT && in.Event.KeyEvent.bKeyDown == false) {
+							if (in.Event.KeyEvent.wVirtualKeyCode == 0x31 || in.Event.KeyEvent.wVirtualKeyCode == 0x61) {
+								aitype = 0;
+								break;
+							}
+							else if (in.Event.KeyEvent.wVirtualKeyCode == 0x32 || in.Event.KeyEvent.wVirtualKeyCode == 0x62) {
+								aitype = 1;
+								break;
+							}
+							else if (in.Event.KeyEvent.wVirtualKeyCode == 0x33 || in.Event.KeyEvent.wVirtualKeyCode == 0x63) {
+								aitype = -1;
+								break;
+							}
+						}
+					}
+					MainGame(filename, aitype);
 				}
 				else {
 					Replay(filename);
@@ -319,7 +371,7 @@ void GameManager::Lobby()
 	}
 }
 
-void GameManager::MainGame(std::string filename)
+void GameManager::MainGame(std::string filename,int aitype)
 {
 	board.InitBoard();
 	srand(time(NULL));
@@ -330,8 +382,16 @@ void GameManager::MainGame(std::string filename)
 	int* selectedpos;
 	movetype prevmove;
 	players[0] = new HumanPlayer{};
-	players[1] = new AIPlayer{};
-
+	//players[0] = new AIPlayer{};
+	if (aitype == 0) {
+		players[1] = new RandAIPlayer{};
+	}
+	else if (aitype == 1) {
+		players[1] = new WeekAIPlayer{};
+	}
+	else {
+		players[1] = new HumanPlayer{};
+	}
 	int current_step = 0;
 	gamerecord.push_back(gamelog(board, current_player));
 
@@ -396,7 +456,7 @@ void GameManager::MainGame(std::string filename)
 			current_player = -1;
 			break;
 		}
-		selectedpos = players[current_player]->SelectChess(board,current_player);
+		selectedpos = players[current_player]->SelectChess(board,current_player,prevmove);
 		if (selectedpos[0] == 'q') {
 			break;
 		}
@@ -431,6 +491,11 @@ void GameManager::MainGame(std::string filename)
 			continue;
 		}
 		else if (selectedpos[0] == 'u') {
+			if (current_step != 0) {
+				current_step--;
+				board = gamerecord[current_step].board;
+				current_player = gamerecord[current_step].current_player;
+			}
 			if (current_step != 0) {
 				current_step--;
 				board = gamerecord[current_step].board;

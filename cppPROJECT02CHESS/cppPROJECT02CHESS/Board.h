@@ -17,6 +17,7 @@ public:
 	};
 	Board();
 	Board(const Board&);
+	~Board();
 	Board operator=(const Board &);
 	void InitBoard();
 	void PrintBoard();

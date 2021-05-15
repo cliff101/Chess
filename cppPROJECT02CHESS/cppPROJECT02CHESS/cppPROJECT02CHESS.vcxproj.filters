@@ -33,7 +33,10 @@
     <ClCompile Include="Board.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="AIPlayer.cpp">
+    <ClCompile Include="WeekAIPlayer.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="RandAIPlayer.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +56,10 @@
     <ClInclude Include="Board.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="AIPlayer.h">
+    <ClInclude Include="WeekAIPlayer.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="RandAIPlayer.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

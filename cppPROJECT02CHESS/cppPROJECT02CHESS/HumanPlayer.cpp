@@ -1,7 +1,7 @@
 #include "HumanPlayer.h"
 #include <chrono>
 
-int* HumanPlayer::SelectChess(Board& const board, int playerid)
+int* HumanPlayer::SelectChess(Board& const board, int playerid, GameManager::movetype prevplayermovetype)
 {
 	int* pos = new int[2];
 	std::cout << "(q): surrender  ";

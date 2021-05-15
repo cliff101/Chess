@@ -5,7 +5,7 @@
 
 class HumanPlayer :public Player {
 public:
-	virtual int* SelectChess(Board& const board, int playerid) override;
+	virtual int* SelectChess(Board& const board, int playerid, GameManager::movetype prevplayermovetype) override;
 	virtual int SelectMoveOption(std::vector<GameManager::movetype>& avail, int selectedchesstype) override;
 	virtual void OnMove(Board& const board, int* frompos, GameManager::movetype to) override;
 	virtual void OnPromote(Board& const board, int Pos[2], Board::basechess outchess) override;

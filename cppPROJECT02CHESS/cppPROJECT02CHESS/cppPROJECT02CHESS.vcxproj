@@ -141,7 +141,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AIPlayer.cpp" />
+    <ClCompile Include="RandAIPlayer.cpp" />
+    <ClCompile Include="WeekAIPlayer.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
@@ -150,7 +151,8 @@
     <ClCompile Include="Viewer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AIPlayer.h" />
+    <ClInclude Include="RandAIPlayer.h" />
+    <ClInclude Include="WeekAIPlayer.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="HumanPlayer.h" />
